@@ -1,0 +1,671 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#082b4c">
+    <title>Nossa Jornada | Atlas Solutions</title>
+
+    <style>
+        :root {
+            --navy: #082b4c;
+            --navy-light: #103d62;
+            --blue: #0879bf;
+            --blue-bright: #20a8e0;
+            --blue-soft: #e7f5fc;
+            --blue-line: #b7dff2;
+            --white: #ffffff;
+            --text: #173650;
+            --muted: #637b90;
+            --border: #d8e8f1;
+            --background: #f1f8fc;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            padding: 35px 20px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: var(--text);
+            background: linear-gradient(135deg, #f5fbfe, #eaf6fb);
+        }
+
+        button { font: inherit; }
+
+        .timeline-section {
+            width: 100%;
+            max-width: 1050px;
+            margin: 0 auto;
+            padding: 27px 30px 22px;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(8, 43, 76, 0.07);
+        }
+
+        .timeline-header { margin-bottom: 18px; }
+
+        .timeline-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 9px;
+            color: var(--blue);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 1.8px;
+        }
+
+        .timeline-label::before {
+            content: "";
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: var(--blue-bright);
+            box-shadow: 0 0 0 4px var(--blue-soft);
+        }
+
+        .timeline-header h1 {
+            margin-bottom: 8px;
+            color: var(--navy);
+            font-size: clamp(24px, 3vw, 32px);
+            letter-spacing: -0.8px;
+            line-height: 1.2;
+        }
+
+        .timeline-header h1 span {
+            color: var(--blue);
+            background: linear-gradient(90deg, var(--blue), var(--blue-bright));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .timeline-header p {
+            max-width: 600px;
+            color: var(--muted);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .timeline-container {
+            position: relative;
+            width: 100%;
+            height: 410px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            border: 1px solid #e0edf5;
+            border-radius: 12px;
+            background-color: #f9fcfe;
+            background-image:
+                linear-gradient(rgba(8, 91, 148, 0.045) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(8, 91, 148, 0.045) 1px, transparent 1px);
+            background-size: 38px 38px;
+            scrollbar-width: thin;
+            scrollbar-color: var(--blue) #e7f0f6;
+            cursor: grab;
+            overscroll-behavior-x: contain;
+            scroll-behavior: smooth;
+        }
+
+        .timeline-container:active { cursor: grabbing; }
+
+        .timeline-container::-webkit-scrollbar { height: 7px; }
+        .timeline-container::-webkit-scrollbar-track { background: #e7f0f6; }
+        .timeline-container::-webkit-scrollbar-thumb {
+            background: var(--blue);
+            border-radius: 10px;
+        }
+
+        .timeline-track {
+            position: relative;
+            display: flex;
+            align-items: stretch;
+            width: max-content;
+            min-width: 100%;
+            height: 100%;
+            padding: 0 35px;
+        }
+
+        .timeline-track::before {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(90deg, #c4e5f5, var(--blue), var(--navy-light), #c4e5f5);
+            transform: translateY(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            flex: 0 0 265px;
+            height: 100%;
+        }
+
+        /* Cartões ficam dentro do quadro, tanto acima quanto abaixo da linha. */
+        .timeline-card {
+            position: absolute;
+            z-index: 3;
+            left: 9px;
+            right: 9px;
+
+            /* A altura é limitada pelo espaço disponível em cada metade. */
+            height: 260px;
+            max-height: calc(50% - 38px);
+            min-height: 0;
+
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+
+            color: var(--text);
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-top: 3px solid var(--blue);
+            border-radius: 12px;
+            box-shadow: 0 10px 28px rgba(8, 43, 76, 0.12);
+
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+
+            transition: opacity 0.2s ease, visibility 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-card {
+            bottom: calc(50% + 30px);
+        }
+
+        .timeline-item:nth-child(even) .timeline-card {
+            top: calc(50% + 30px);
+        }
+
+        .timeline-item.active .timeline-card {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .timeline-number {
+            display: block;
+            flex-shrink: 0;
+            margin-bottom: 6px;
+            color: var(--blue);
+            font-size: 9px;
+            font-weight: 800;
+            letter-spacing: 1.3px;
+        }
+
+        .timeline-card h2 {
+            flex-shrink: 0;
+            margin-bottom: 5px;
+            color: var(--navy);
+            font-size: 14px;
+            line-height: 1.3;
+        }
+
+        .timeline-card time {
+            flex-shrink: 0;
+            margin-bottom: 8px;
+            color: var(--muted);
+            font-size: 10px;
+            font-weight: 700;
+        }
+
+        /* O texto pode ser rolado dentro do cartão, sem aumentar ou cortar o quadro. */
+        .timeline-content {
+            min-height: 0;
+            flex: 1 1 auto;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding: 10px;
+            background: #f0f8fc;
+            border: 1px solid #e1eff7;
+            border-radius: 8px;
+            color: var(--text);
+            font-size: 11px;
+            line-height: 1.55;
+            overflow-wrap: anywhere;
+            scrollbar-width: thin;
+            scrollbar-color: var(--blue-line) transparent;
+        }
+
+        .timeline-content h3 {
+            margin-bottom: 4px;
+            color: var(--navy);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .timeline-content p { margin-bottom: 10px; }
+        .timeline-content p:last-child { margin-bottom: 0; }
+        .timeline-content ul { margin: 0 0 10px; padding-left: 16px; }
+        .timeline-content li { margin-bottom: 5px; }
+        .timeline-content strong { color: var(--navy); }
+
+        .timeline-dot {
+            position: absolute;
+            z-index: 4;
+            top: 50%;
+            left: 50%;
+            display: grid;
+            place-items: center;
+            width: 19px;
+            height: 19px;
+            padding: 0;
+            border: 3px solid var(--white);
+            border-radius: 50%;
+            background: #9bb2c2;
+            box-shadow: 0 0 0 1px #9bb2c2;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+            transition: background 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+        }
+
+        .timeline-dot:hover,
+        .timeline-item.active .timeline-dot {
+            background: var(--blue);
+            box-shadow: 0 0 0 4px #d7effb;
+            transform: translate(-50%, -50%) scale(1.12);
+        }
+
+        .timeline-dot:focus-visible {
+            outline: 3px solid var(--navy);
+            outline-offset: 5px;
+        }
+
+        .timeline-date {
+            position: absolute;
+            left: 50%;
+            width: 220px;
+            color: #4d6579;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            transform: translateX(-50%);
+        }
+
+        .timeline-item:nth-child(odd) .timeline-date {
+            top: calc(50% + 19px);
+        }
+
+        .timeline-item:nth-child(even) .timeline-date {
+            bottom: calc(50% + 19px);
+        }
+
+        .timeline-item.active .timeline-date { color: var(--blue); }
+
+        .timeline-success {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 9px;
+            padding: 8px 10px;
+            color: var(--navy);
+            background: #e8f7ef;
+            border: 1px solid #c9ead8;
+            border-radius: 8px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .timeline-success span { color: #168552; font-size: 15px; }
+
+        .timeline-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .timeline-hint {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--muted);
+            font-size: 11px;
+            line-height: 1.5;
+        }
+
+        .timeline-hint-icon {
+            display: grid;
+            place-items: center;
+            width: 29px;
+            height: 29px;
+            flex-shrink: 0;
+            color: var(--blue);
+            background: var(--blue-soft);
+            border-radius: 50%;
+            font-size: 17px;
+        }
+
+        .timeline-controls { display: flex; gap: 7px; }
+
+        .timeline-controls button {
+            display: grid;
+            place-items: center;
+            width: 35px;
+            height: 35px;
+            color: var(--navy);
+            background: #edf6fb;
+            border: 1px solid #dcebf4;
+            border-radius: 8px;
+            font-size: 19px;
+            cursor: pointer;
+            transition: color 0.2s ease, background 0.2s ease;
+        }
+
+        .timeline-controls button:hover:not(:disabled) {
+            color: var(--white);
+            background: var(--navy);
+        }
+
+        .timeline-controls button:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .timeline-controls button:focus-visible {
+            outline: 2px solid var(--blue);
+            outline-offset: 3px;
+        }
+
+        .timeline-instruction {
+            margin-top: 10px;
+            color: #8093a3;
+            font-size: 10px;
+            text-align: center;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 18px 10px; }
+
+            .timeline-section {
+                padding: 20px 13px 16px;
+                border-radius: 13px;
+            }
+
+            .timeline-header { margin-bottom: 15px; }
+            .timeline-header h1 { font-size: 25px; }
+            .timeline-header p { font-size: 12px; }
+
+            .timeline-container { height: 385px; }
+            .timeline-track { padding: 0 15px; }
+            .timeline-item { flex-basis: 245px; }
+
+            .timeline-card {
+                left: 7px;
+                right: 7px;
+                height: 235px;
+                max-height: calc(50% - 34px);
+                padding: 10px;
+            }
+
+            .timeline-card h2 { font-size: 13px; }
+            .timeline-content { padding: 9px; font-size: 10px; }
+            .timeline-date { width: 210px; font-size: 10px; }
+
+            .timeline-footer { align-items: flex-start; }
+            .timeline-hint { max-width: 180px; }
+
+            .timeline-controls button {
+                width: 32px;
+                height: 32px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <main class="timeline-section">
+        <header class="timeline-header">
+            <div class="timeline-label">TECNOLOGIA · DESIGN · ESTRATÉGIA</div>
+            <h1>Nossa história em <span>movimento.</span></h1>
+            <p>
+                Da fundação da Atlas Solutions ao lançamento do Projeto Orelha.
+                Explore os marcos que construíram nossa jornada.
+            </p>
+        </header>
+
+        <section class="timeline-container" id="timelineContainer"
+                 aria-label="Linha do tempo da Atlas Solutions" tabindex="0">
+            <div class="timeline-track" id="timelineTrack">
+
+                <article class="timeline-item">
+                    <div class="timeline-card">
+                        <span class="timeline-number">01 / FUNDAÇÃO</span>
+                        <h2>Fundação da Empresa e Formação do Time</h2>
+                        <time>Fevereiro de 2026</time>
+                        <div class="timeline-content">
+                            <h3>Constituição da Atlas Solutions</h3>
+                            <p>Fundação da empresa sob a liderança de <strong>Rodrigo Valentim (CEO / Presidente)</strong>, reunindo Ana Luiza Moreira, André Marcos Barbosa, Gabriel Alves, Mayara Florencio, Nicollas Henrique, Rafaella Almeida, Rayssa Andrade e Rodrigo Valentim.</p>
+                            <h3>Definição de Visão Estratégica</h3>
+                            <p>Alinhamento do escopo de atuação no mercado e escolha da causa social do primeiro grande projeto: um ecossistema digital para apoio e aceleração de ONGs de proteção animal.</p>
+                        </div>
+                    </div>
+                    <button class="timeline-dot" type="button" aria-label="Ver marco: Fundação da Atlas Solutions" aria-expanded="false" title="Ver detalhes"></button>
+                    <span class="timeline-date">Fev. 2026</span>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-card">
+                        <span class="timeline-number">02 / IDENTIDADE</span>
+                        <h2>Estruturação Operacional e Branding</h2>
+                        <time>Março de 2026</time>
+                        <div class="timeline-content">
+                            <h3>Divisão de cargos e responsabilidades</h3>
+                            <ul>
+                                <li><strong>Liderança e gestão:</strong> Rodrigo Valentim.</li>
+                                <li><strong>Back-end:</strong> Rodrigo Valentim, André Marcos Barbosa e Ana Luiza Moreira.</li>
+                                <li><strong>Front-end (UI/UX):</strong> Gabriel Alves, Rafaella Almeida e Mayara Florencio.</li>
+                                <li><strong>Banco de dados:</strong> Nicollas Henrique.</li>
+                                <li><strong>Documentação e pesquisa:</strong> Ana Luiza Moreira e Rayssa Andrade.</li>
+                            </ul>
+                            <h3>Criação da identidade visual</h3>
+                            <p>Concepção da marca Atlas Solutions e criação da identidade visual do Projeto Orelha pelas equipes de Front-end e Design.</p>
+                        </div>
+                    </div>
+                    <button class="timeline-dot" type="button" aria-label="Ver marco: Estruturação Operacional" aria-expanded="false" title="Ver detalhes"></button>
+                    <span class="timeline-date">Mar. 2026</span>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-card">
+                        <span class="timeline-number">03 / PLANEJAMENTO</span>
+                        <h2>Arquitetura, Pesquisa e Metodologia Ágil</h2>
+                        <time>Abril e Maio de 2026</time>
+                        <div class="timeline-content">
+                            <h3>Implementação do Scrum</h3>
+                            <p>Organização do fluxo de trabalho em sprints, com controle de versão e versionamento no GitHub.</p>
+                            <h3>Pesquisa de mercado e diagnóstico</h3>
+                            <p>Pesquisas quantitativas e qualitativas conduzidas por Ana Luiza e Rayssa com o público geral e instituições parceiras: COSAP, Amigos de São Francisco e Cão Sem Dono.</p>
+                            <h3>Modelagem de dados e casos de uso</h3>
+                            <p>Estruturação da arquitetura do banco de dados relacional por Nicollas Henrique e definição dos diagramas do sistema.</p>
+                        </div>
+                    </div>
+                    <button class="timeline-dot" type="button" aria-label="Ver marco: Arquitetura e Pesquisa" aria-expanded="false" title="Ver detalhes"></button>
+                    <span class="timeline-date">Abr. – Mai. 2026</span>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-card">
+                        <span class="timeline-number">04 / DESENVOLVIMENTO</span>
+                        <h2>Desenvolvimento Técnico do Sistema</h2>
+                        <time>Junho a Agosto de 2026</time>
+                        <div class="timeline-content">
+                            <h3>Back-end e APIs</h3>
+                            <p>Implementação das rotas, lógica de negócios e segurança com Node.js e Express por Rodrigo, André e Ana Luiza.</p>
+                            <h3>Desenvolvimento do Front-end</h3>
+                            <p>Construção da interface responsiva e do catálogo interativo em HTML5, CSS3 e JavaScript por Gabriel, Rafaella e Mayara.</p>
+                            <h3>Banco de dados e integração</h3>
+                            <p>Integração do MySQL por Nicollas Henrique, permitindo o cadastro de animais, voluntários e doações.</p>
+                        </div>
+                    </div>
+                    <button class="timeline-dot" type="button" aria-label="Ver marco: Desenvolvimento Técnico" aria-expanded="false" title="Ver detalhes"></button>
+                    <span class="timeline-date">Jun. – Ago. 2026</span>
+                </article>
+
+                <article class="timeline-item">
+                    <div class="timeline-card">
+                        <span class="timeline-number">05 / LANÇAMENTO</span>
+                        <h2>Lançamento do Projeto Orelha</h2>
+                        <time>Setembro de 2026</time>
+                        <div class="timeline-content">
+                            <h3>Testes e refinamento</h3>
+                            <p>Revisão completa do código-fonte, testes de usabilidade e finalização do material audiovisual e institucional.</p>
+                            <h3>Go-To-Market</h3>
+                            <p>Lançamento oficial do <strong>Projeto Orelha</strong> e publicação do site institucional da <strong>Atlas Solutions</strong>, consolidando a entrega com sucesso por toda a equipe.</p>
+                            <div class="timeline-success"><span>✓</span> Projeto lançado</div>
+                        </div>
+                    </div>
+                    <button class="timeline-dot" type="button" aria-label="Ver marco: Lançamento do Projeto Orelha" aria-expanded="false" title="Ver detalhes"></button>
+                    <span class="timeline-date">Set. 2026</span>
+                </article>
+
+            </div>
+        </section>
+
+        <div class="timeline-footer">
+            <div class="timeline-hint">
+                <span class="timeline-hint-icon">↔</span>
+                <span>Clique nos pontos para explorar cada etapa</span>
+            </div>
+            <div class="timeline-controls">
+                <button id="timelinePrev" type="button" aria-label="Marco anterior" title="Voltar">←</button>
+                <button id="timelineNext" type="button" aria-label="Próximo marco" title="Avançar">→</button>
+            </div>
+        </div>
+
+        <p class="timeline-instruction">Você também pode arrastar a linha do tempo horizontalmente.</p>
+    </main>
+
+    <script>
+        const container = document.getElementById("timelineContainer");
+        const track = document.getElementById("timelineTrack");
+        const items = Array.from(track.querySelectorAll(".timeline-item"));
+        const prevButton = document.getElementById("timelinePrev");
+        const nextButton = document.getElementById("timelineNext");
+
+        let activeIndex = -1;
+
+        function selectTimelineItem(index) {
+            const selectedItem = items[index];
+            if (!selectedItem) return;
+
+            const shouldClose = activeIndex === index;
+
+            items.forEach((item) => {
+                item.classList.remove("active");
+                const dot = item.querySelector(".timeline-dot");
+                dot.setAttribute("aria-expanded", "false");
+                dot.setAttribute("title", "Ver detalhes");
+            });
+
+            if (shouldClose) {
+                activeIndex = -1;
+                return;
+            }
+
+            selectedItem.classList.add("active");
+
+            const selectedDot = selectedItem.querySelector(".timeline-dot");
+            selectedDot.setAttribute("aria-expanded", "true");
+            selectedDot.setAttribute("title", "Fechar detalhes");
+            activeIndex = index;
+
+            const itemLeft = selectedItem.offsetLeft;
+            const itemRight = itemLeft + selectedItem.offsetWidth;
+            const visibleLeft = container.scrollLeft;
+            const visibleRight = visibleLeft + container.clientWidth;
+
+            if (itemLeft < visibleLeft) {
+                container.scrollTo({ left: itemLeft - 15, behavior: "smooth" });
+            } else if (itemRight > visibleRight) {
+                container.scrollTo({
+                    left: itemRight - container.clientWidth + 15,
+                    behavior: "smooth"
+                });
+            }
+        }
+
+        items.forEach((item, index) => {
+            item.querySelector(".timeline-dot").addEventListener("click", () => {
+                selectTimelineItem(index);
+            });
+        });
+
+        function updateControls() {
+            prevButton.disabled = container.scrollLeft <= 2;
+            nextButton.disabled =
+                container.scrollLeft + container.clientWidth >= container.scrollWidth - 2;
+        }
+
+        function scrollTimeline(direction) {
+            const distance = items[0].getBoundingClientRect().width;
+            container.scrollBy({ left: direction * distance, behavior: "smooth" });
+        }
+
+        prevButton.addEventListener("click", () => scrollTimeline(-1));
+        nextButton.addEventListener("click", () => scrollTimeline(1));
+        container.addEventListener("scroll", updateControls);
+        window.addEventListener("resize", updateControls);
+
+        let isDragging = false;
+        let startX = 0;
+        let initialScroll = 0;
+
+        container.addEventListener("mousedown", (event) => {
+            if (event.button !== 0 || event.target.closest("button, a")) return;
+            isDragging = true;
+            startX = event.clientX;
+            initialScroll = container.scrollLeft;
+        });
+
+        window.addEventListener("mousemove", (event) => {
+            if (!isDragging) return;
+            const distance = event.clientX - startX;
+            if (Math.abs(distance) > 4) {
+                container.scrollLeft = initialScroll - distance;
+            }
+        });
+
+        window.addEventListener("mouseup", () => { isDragging = false; });
+        window.addEventListener("blur", () => { isDragging = false; });
+        container.addEventListener("mouseleave", () => { isDragging = false; });
+
+        container.addEventListener("keydown", (event) => {
+            if (event.key === "ArrowRight") {
+                event.preventDefault();
+                scrollTimeline(1);
+            }
+            if (event.key === "ArrowLeft") {
+                event.preventDefault();
+                scrollTimeline(-1);
+            }
+            if (event.key === "Escape" && activeIndex !== -1) {
+                selectTimelineItem(activeIndex);
+            }
+        });
+
+        updateControls();
+    </script>
+</body>
+</html>
