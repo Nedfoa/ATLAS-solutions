@@ -1634,3 +1634,87 @@ textarea {
     font-size: 9px
   }
 }
+
+
+/* ========================================
+   PÁGINA DE SUCESSO DO FORMULÁRIO
+======================================== */
+
+.sucesso-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--navy, #101d35);
+}
+
+.sucesso-card {
+  width: 100%;
+  max-width: 600px;
+  padding: 48px 32px;
+  text-align: center;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.sucesso-logo {
+  display: block;
+  width: 150px;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto 32px;
+}
+
+.sucesso-icone {
+  width: 72px;
+  height: 72px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #d9f7ed;
+  color: #087f5b;
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.sucesso-etiqueta {
+  display: block;
+  margin-bottom: 12px;
+  color: #087f8c;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 2px;
+}
+
+.sucesso-card h1 {
+  margin: 0 0 16px;
+  color: var(--navy, #101d35);
+  font-family: 'Inter', sans-serif;
+  font-size: clamp(26px, 5vw, 36px);
+  line-height: 1.2;
+}
+
+.sucesso-card p {
+  margin: 0 0 28px;
+  color: #5b6472;
+  font-size: 16px;
+  line-height: 1.7;
+}
+
+.sucesso-card .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
+@media (max-width: 480px) {
+  .sucesso-card {
+    padding: 36px 22px;
+  }
+}

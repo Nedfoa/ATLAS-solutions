@@ -96,3 +96,14 @@ document.querySelectorAll('[data-carrossel]').forEach(carrossel => {
   botaoProximo?.addEventListener('click', () => mostrarSlide(indiceAtual + 1));
   mostrarSlide(0);
 });
+
+
+
+// O formulário é apenas demonstrativo até ser conectado a uma API ou serviço de e-mail.
+document.getElementById('contactForm')?.addEventListener('submit', evento => {
+  evento.preventDefault();
+  const formulario = evento.currentTarget;
+  const aviso = document.getElementById('formNote');
+  if (aviso) aviso.textContent = 'Mensagem preparada! Conecte este formulário ao backend ou serviço de e-mail da ATLAS.';
+  formulario.reset();
+});

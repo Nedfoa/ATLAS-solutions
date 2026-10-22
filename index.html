@@ -268,13 +268,88 @@
           <h2>Tem uma ideia?<br><em>Vamos tirar do papel.</em></h2>
           <p>Conte um pouco sobre o que você precisa e vamos conversar sobre a melhor solução.</p>
         </div>
-        <form class="contact-form reveal" id="contactForm">
-          <label>Seu nome<input type="text" name="nome" placeholder="Como podemos chamar você?" required></label>
-          <label>E-mail<input type="email" name="email" placeholder="seuemail@exemplo.com" required></label>
-          <label>Sobre o projeto<textarea name="mensagem" rows="4" placeholder="Conte brevemente sobre sua ideia..." required></textarea></label>
-          <button type="submit" class="btn btn-light">Enviar mensagem <span>→</span></button>
-          <p class="form-note" id="formNote"></p>
-        </form>
+        
+
+<!-- Formulário de contato conectado ao FormSubmit -->
+<form
+  class="contact-form reveal"
+  action="https://formsubmit.co/atlassolutionstcc@gmail.com"
+  method="POST"
+>
+  <!-- Assunto do e-mail recebido pela ATLAS -->
+  <input
+    type="hidden"
+    name="_subject"
+    value="Novo contato pelo site ATLAS Solutions"
+  >
+
+  <!-- Organiza os dados recebidos em formato de tabela -->
+  <input
+    type="hidden"
+    name="_template"
+    value="table"
+  >
+
+  <!-- Proteção contra spam -->
+  <input
+    type="hidden"
+    name="_captcha"
+    value="true"
+  >
+
+  <!-- Redireciona para a página de sucesso após o envio -->
+  <input
+    type="hidden"
+    name="_next"
+    value="./sucesso.html"
+  >
+
+  <!-- Campo de nome -->
+  <label>
+    Seu nome
+    <input
+      type="text"
+      name="nome"
+      placeholder="Como podemos chamar você?"
+      autocomplete="name"
+      required
+    >
+  </label>
+
+  <!-- E-mail de quem está entrando em contato -->
+  <label>
+    E-mail
+    <input
+      type="email"
+      name="email"
+      placeholder="seuemail@exemplo.com"
+      autocomplete="email"
+      required
+    >
+  </label>
+
+  <!-- Mensagem sobre o projeto -->
+  <label>
+    Sobre o projeto
+    <textarea
+      name="mensagem"
+      rows="4"
+      placeholder="Conte brevemente sobre sua ideia..."
+      required
+    ></textarea>
+  </label>
+
+  <!-- Envia os dados ao serviço de e-mail -->
+  <button type="submit" class="btn btn-light">
+    Enviar mensagem <span>→</span>
+  </button>
+
+  <p class="form-note">
+    Ao enviar, você concorda em utilizar estes dados para recebermos e respondermos ao seu contato.
+  </p>
+</form>
+
+
       </div>
     </section>
   </main>
@@ -283,11 +358,11 @@
     <div class="container footer-top">
       <div>
         <img src="assets/logo.png" alt="ATLAS Solutions" class="footer-logo">
-        <p>Tecnologia que transforma ideias<br>em soluções digitais.</p>
+        <p>Onde problemas viram progressos.</p>
       </div>
       <div class="footer-links">
         <div><strong>Navegação</strong><a href="#sobre">Sobre</a><a href="#servicos">Serviços</a><a href="#orelha">Orelha</a><a href="#projetos">Projetos</a></div>
-        <div><strong>Contato</strong><a href="mailto:contato@atlassolutions.com.br">contato@atlassolutions.com.br</a><a href="#contato">Fale conosco</a></div>
+        <div><strong>Contato</strong><a href="mailto:contato@atlassolutions.com.br">atlassolutionstcc@gmail.com</a><a href="#contato">Fale conosco</a></div>
       </div>
     </div>
     <div class="container footer-bottom">
