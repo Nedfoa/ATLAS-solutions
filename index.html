@@ -270,20 +270,19 @@
         </div>
         
 
+
 <!-- Formulário de contato conectado ao FormSubmit -->
 <form
   class="contact-form reveal"
   action="https://formsubmit.co/atlassolutionstcc@gmail.com"
   method="POST"
 >
-
-<input
-  type="hidden"
-  name="_next"
-  value="https://atlas-solutions.netlify.app/sucesso.html"
->
-
-
+  <!-- Redirecionamento após o envio -->
+  <input
+    type="hidden"
+    name="_next"
+    value="https://atlas-solutions.netlify.app/sucesso.html"
+  >
 
   <!-- Assunto do e-mail recebido pela ATLAS -->
   <input
@@ -304,13 +303,6 @@
     type="hidden"
     name="_captcha"
     value="true"
-  >
-
-  <!-- Redireciona para a página de sucesso após o envio -->
-  <input
-    type="hidden"
-    name="_next"
-    value="./sucesso.html"
   >
 
   <!-- Campo de nome -->
@@ -348,7 +340,7 @@
     ></textarea>
   </label>
 
-  <!-- Envia os dados ao serviço de e-mail -->
+  <!-- Botão de envio -->
   <button type="submit" class="btn btn-light">
     Enviar mensagem <span>→</span>
   </button>
@@ -357,6 +349,7 @@
     Ao enviar, você concorda em utilizar estes dados para recebermos e respondermos ao seu contato.
   </p>
 </form>
+
 
 
       </div>
